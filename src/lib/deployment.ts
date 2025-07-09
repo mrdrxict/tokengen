@@ -48,12 +48,12 @@ export class DeploymentService {
       throw new Error('MetaMask not installed')
     }
 
-    const provider = new ethers.BrowserProvider(window.ethereum)
+    const provider = new ethers.BrowserProvider(window.ethereum as any)
     this.signer = await provider.getSigner()
     
     // Switch to correct network
     try {
-      await window.ethereum.request({
+      await (window.ethereum as any).request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: `0x${this.network.id.toString(16)}` }]
       })
@@ -70,9 +70,9 @@ export class DeploymentService {
   }
 
   private async addNetworkToMetaMask() {
-    if (!window.ethereum) return
+    if (typeof window === 'undefined' || !window.ethereum) return
 
-    await window.ethereum.request({
+    await (window.ethereum as any).request({
       method: 'wallet_addEthereumChain',
       params: [{
         chainId: `0x${this.network.id.toString(16)}`,

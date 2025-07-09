@@ -58,7 +58,7 @@ export async function connectWallet(): Promise<string | null> {
   }
 
   try {
-    const accounts = await window.ethereum.request({
+    const accounts = await (window.ethereum as any).request({
       method: 'eth_requestAccounts'
     })
     return accounts[0]
@@ -74,7 +74,7 @@ export async function switchNetwork(networkId: number): Promise<boolean> {
   }
 
   try {
-    await window.ethereum.request({
+    await (window.ethereum as any).request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: `0x${networkId.toString(16)}` }]
     })

@@ -11,12 +11,15 @@ export default function Header() {
 
   useEffect(() => {
     // Check if wallet is already connected
-    if (typeof window !== 'undefined' && window.ethereum) {
-      window.ethereum.request({ method: 'eth_accounts' })
+    if (typeof window !== 'undefined' && (window as any).ethereum) {
+      (window as any).ethereum.request({ method: 'eth_accounts' })
         .then((accounts: string[]) => {
           if (accounts.length > 0) {
             setWalletAddress(accounts[0])
           }
+        })
+        .catch((error: any) => {
+          console.error('Failed to get accounts:', error)
         })
     }
   }, [])

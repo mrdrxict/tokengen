@@ -1,10 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Use SWC minifier in WebAssembly mode for WebContainer compatibility
-  swcMinify: true,
   experimental: {
-    // Force use of WebAssembly SWC instead of native binaries
-    useWasmBinary: true,
+    serverComponentsExternalPackages: ['hardhat', 'ethers']
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+        crypto: false,
+        stream: false,
+        url: false,
+        zlib: false,
+        http: false,
+        https: false,
+        assert: false,
+        os: false,
+        path: false,
+      }
+    }
+    return config
   },
 }
 
